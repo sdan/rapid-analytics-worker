@@ -1,0 +1,737 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Rapid Analytics</title><link rel="stylesheet" type="text/css" href="https://sdan.cc/assets/css/colorgrad.css"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="grid.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 1200px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+#inner {
+  width: 50%;
+  margin: 0 auto;
+}
+
+
+@font-face {
+  font-family: "Now Bold";
+  src: url("HelveticaNowDisplay-Bold.ttf");
+}
+
+.themed-grid-col {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: rgba(86, 61, 124, .15);
+  border: 1px solid rgba(86, 61, 124, .2);
+}
+
+.from-top-pad {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: calc(1.75em + 0.5vmin);
+}
+
+.nowbold {
+	font-family: "Now Bold", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
+}
+
+
+.heading {
+	font-size: calc(9.75em + 1vmin);
+}
+
+.blastoff-heading {
+    -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-image: url('https://media.giphy.com/media/3ohs4rclkSSrNGSlFK/giphy.gif');
+  color: black;
+}
+.privacy-heading {
+    -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-image: url('https://media.giphy.com/media/S5PTSQtXO2t9UTTZr9/giphy.gif');
+  color: black;
+}
+.accurate-heading {
+    -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-image: url('https://media.giphy.com/media/3o751PJGj42PDsMJK8/giphy.gif');
+  color: black;
+}
+
+#rmall {
+  all: initial;
+  * {
+    all: unset;
+  }
+}
+	
+</style>
+
+</style><script async src="https://storage.googleapis.com/pingponganalytics/pingone.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+<script src="http://datamaps.github.io/scripts/0.4.4/datamaps.world.min.js"></script>
+
+
+</head><body>
+
+
+<div id="rmall" class="container">
+
+  <h2 class="accurate-heading heading nowbold mt-4">accurate</h2>
+  <h2 class="privacy-heading heading nowbold mt-4">private</h2>
+  <h2 class="heading nowbold mt-4"><span class="blastoff-heading">rapid</span> analytics</h2>
+
+
+
+
+  <div class="row mb-3">
+    <!-- <div class="col-12 col-sm-6 col-lg-8 themed-grid-col">.col-12 .col-sm-6 .col-lg-8</div>
+    <div class="col-6 col-lg-4 themed-grid-col">.col-6 .col-lg-4</div> -->
+  </div>
+  <div class="from-top-pad center-block">
+    <div class="nowbold">We're building the fastest analytics service. Ever.</div>
+
+   <canvas id="bar-chart" height="40"></canvas>
+
+
+
+
+	<article id="099832ef-162f-4220-8bdb-b3dabc2a1f4a" class="page sans">
+
+
+
+
+<script>
+var bar_ctx = document.getElementById('bar-chart').getContext('2d');
+  bar_ctx.height = 10;
+
+        var purple_orange_gradient = bar_ctx.createLinearGradient(0, 0, 1000, 0);
+        purple_orange_gradient.addColorStop(0.0, 'rgb(0, 84, 253)');
+        purple_orange_gradient.addColorStop(0.1429, 'rgb(255, 25, 247)');
+        purple_orange_gradient.addColorStop(0.2856, 'rgb(255, 46, 93)');
+        purple_orange_gradient.addColorStop(0.4284, 'rgb(255, 170, 7)');
+        purple_orange_gradient.addColorStop(0.5712, 'rgb(255, 170, 7)');
+        purple_orange_gradient.addColorStop(0.714, 'rgb(255, 46, 93)');
+        purple_orange_gradient.addColorStop(0.8568, 'rgb(255, 25, 247)');
+        purple_orange_gradient.addColorStop(1.0, 'rgb(0, 84, 253)');
+
+        var bar_chart = new Chart(bar_ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: ["Rapid Analytics", "Google Analytics", "Fathom Analytics", "Clicky", "Simple Analytics"],
+                datasets: [{
+                    label: 'Average speed globally in ms',
+                    data: [90, 100, 420, 450, 580],
+                    backgroundColor: purple_orange_gradient,
+                    hoverBackgroundColor: purple_orange_gradient,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+              responsive: true,
+                scales: {
+                    yAxes: [{
+                        categorySpacing: 0,
+                        barThickness: 10
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                            //max:100
+                        }
+                    }]
+                }
+            }
+        });
+</script>
+  </div>
+
+</div> 
+
+<p id="1f2acb2f-32f3-4d37-8107-fb98016d3743" class="">Demo: <a href="https://ping.sdan.io/blog.suryad.com">https://ping.sdan.io/blog.suryad.com</a> or <a href="https://ping.sdan.io/pingpong.suryad.com">https://ping.sdan.io/pingpong.suryad.com</a> or</p><p id="7fe1fa71-2114-4451-bcc4-547e0ffabd4f" class=""><a href="https://ping.sdan.io/dantuluri.github.io">https://ping.sdan.io/dantuluri.github.io</a> (testing)</p><p id="137f0275-624a-4c55-955e-c566abb1cc5b" class="">
+</p><p id="5e2c9f2b-079e-40d6-bf7f-a4813afc517c" class="">To setup on your own website just include this in your header or footer: </p><pre id="f378df96-641d-4947-8cb8-bc748f2b6bc7" class="code"><code>&lt;script async src=&quot;https://storage.googleapis.com/pingponganalytics/pingone.js&quot;&gt;&lt;/script&gt;</code></pre><p id="65122759-9ea9-4da8-8268-a358551049ac" class="">
+</p><p id="59ad24f9-6903-4002-8856-51122648ebc3" class="">Then go to <a href="https://ping.sdan.io/[your">https://ping.sdan.io/</a><strong><a href="https://ping.sdan.io/[your">[your</a></strong><strong> website] </strong>to see your analytics!</p><p id="8e864ba7-d226-4c1f-b443-ee5c73956f1a" class="">
+</p><hr id="b3a61c9a-eccb-4abd-87e7-e08296dc47d4"/><p id="8b1859a0-93d3-4b91-b5c6-fa94e5037319" class="">Example:</p><p id="4f62a0a9-603c-41af-9c1f-ce2a98cb2d15" class="">If you have <a href="https://example.com">https://example.com</a> as your website, simply add the script above between your &lt;head&gt; tags and go to https://ping.sdan.io/example.com</p><hr id="ffdc3d28-90c8-4e15-8df2-e6d3459b39d2"/><p id="a7b66b96-b1fd-447c-b37d-158eb5eb9236" class="">
+</p><div id="351455da-5f45-44fe-8b95-c168f8f43556" class="collection-content"><h4 class="collection-title">Why should you use Rapid Analytics?</h4><table class="collection-content"><thead><tr><th>Features</th><th>Rapid Analytics</th><th>Simple Analytics</th><th>Fathom Analytics</th></tr></thead><tbody><tr id="b339b432-8a2f-4163-a90b-655130ad3d88"><td class="cell-title"><a href="https://www.notion.so/Speed-b339b4328a2f4163a90b655130ad3d88">Speed*</a></td><td class="cell-kyw2">Under 90ms</td><td class="cell-W]&lt;V">Under 580ms</td><td class="cell-^@?O">Under 420ms</td></tr><tr id="aeb1dd13-e530-4a29-b124-95cb346ffaec"><td class="cell-title"><a href="https://www.notion.so/Not-on-blacklists-aeb1dd13e5304a29b12495cb346ffaec">Not on blacklists?</a></td><td class="cell-kyw2">✅</td><td class="cell-W]&lt;V">❌</td><td class="cell-^@?O">✅</td></tr><tr id="aa29f448-5e73-4c6b-b713-4198c9ac92f3"><td class="cell-title"><a href="https://www.notion.so/Under-2-a-month-aa29f4485e734c6bb7134198c9ac92f3">Under $2 a month?</a></td><td class="cell-kyw2">✅</td><td class="cell-W]&lt;V">❌</td><td class="cell-^@?O">❌</td></tr><tr id="9effab5c-cfa3-4034-bb9b-d74bfc40e1ca"><td class="cell-title"><a href="https://www.notion.so/Host-entire-service-on-your-subdomain-9effab5ccfa34034bb9bd74bfc40e1ca">Host entire service on your subdomain?</a></td><td class="cell-kyw2">✅</td><td class="cell-W]&lt;V">❌</td><td class="cell-^@?O">❌</td></tr><tr id="3a9f2ed5-f88e-48ec-acb1-0fa63e9a9871"><td class="cell-title"><a href="https://www.notion.so/Number-of-data-centers-3a9f2ed5f88e48ecacb10fa63e9a9871">Number of data-centers?</a></td><td class="cell-kyw2">194</td><td class="cell-W]&lt;V">1</td><td class="cell-^@?O">69</td></tr><tr id="b34a1d82-45d3-490c-a6db-73261c305de1"><td class="cell-title"><a href="https://www.notion.so/End-to-end-encryption-and-hashing-b34a1d8245d3490ca6db73261c305de1">End to end encryption and hashing?</a></td><td class="cell-kyw2">✅</td><td class="cell-W]&lt;V">❌</td><td class="cell-^@?O">❌</td></tr><tr id="08f574a8-5af6-45e8-bb14-85eb24c58208"><td class="cell-title"><a href="https://www.notion.so/Price-for-under-1-000-visitors-monthly-08f574a85af645e8bb1485eb24c58208">Price for under 1,000 visitors monthly</a></td><td class="cell-kyw2">$0</td><td class="cell-W]&lt;V">$19</td><td class="cell-^@?O">$14</td></tr></tbody></table></div><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="b1b96a3e-b64a-4070-96db-7560ec3a47dd"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">*Speed is calculated as the average response time from 7 data centers around the world. <strong>To be clear, the current &quot;production&quot; branch is running at under 1000ms latency as of November 23rd. I am still </strong><a href="https://twitter.com/notsuryad/status/1198171416597676032?s=20"><strong>stress testing the under 90ms branch for deployment in the production environment</strong></a><strong> and going to be packaging it with a bunch of other goodies like a totally new UI</strong>
+</div></figure><p id="d7323e96-8671-4a3a-b447-1c8b48647d4c" class="">At the moment we aren&#x27;t hosting for individuals (to circumvent future blacklisting) but we do work with uBlock Origin.</p><h1 id="ef12451d-0424-41bd-8ed9-1aea10de5a94" class="">Reliability</h1><p id="7bee9e35-1f05-421e-b3d6-8f50b36c59c2" class="">Using Google Analytics, Mixpanel, or the wide variety of analytics services?</p><p id="6b3c55ca-37a5-4473-8b86-e8bd7d30beda" class=""><strong>You&#x27;re not getting reliable and accurate data... at all.</strong></p><p id="a0ecced6-052b-42aa-8cda-2f07ececc75e" class="">With ad-blockers, blacklisting host files, and ad-blocking built into many services like VPNs, users are blocking everything from top to bottom, including your analytics service, meaning you don&#x27;t get accurate analytics data.</p><p id="fc35fd4d-16e3-4c1e-888f-dcd209cd4c82" class="">
+</p><p id="50bcbe67-73f4-424f-a338-791404ed04e1" class="">We solve this by hosting our service under your subdomains. By pinging your own domains to provide you raw, unfiltered analytics, it&#x27;s hard to get inaccurate data.</p><h1 id="b537a235-1675-498b-8a18-72cc217baa6b" class="">Privacy</h1><p id="d13637b6-185e-4f62-97a7-742d775dfdad" class="">We collect the basics.</p><p id="ebe108d9-9ce3-4fbe-8b98-51207f1ab9c5" class="">No Mixpanel type of behavioral analytics or Google Analytics&#x27; gazillion tentacles.</p><p id="682844f5-3379-489c-8e63-ca2998d9b1a3" class="">Just raw and simple page analytics.</p><h1 id="08026ac3-2909-4ec3-a765-bdc7c78875fe" class="">Speed</h1><p id="a8d0e2a6-496b-48c1-ba79-b95fc9c0dccf" class="">Running on the edge and built upon a purely serverless architecture, we perform in super-speed over 194 of Cloudflare&#x27;s data centers regardless of how many millions of users you&#x27;re getting.</p><p id="2798ab30-f9ce-4a28-963a-a26a9dc70c48" class="">
+</p><p id="4b7b5d11-b5ac-4f96-82b0-4fa585408526" class="">
+</p><h2 id="885ae3d7-8afa-44b2-a5e5-ec1efae54fdb" class="">Pricing</h2><hr id="e1071147-4b76-46e7-9639-13c02a1f3225"/><h3 id="57dc1ac0-96c6-4352-b77b-2c14f5cdea0a" class="">Free</h3><p id="c6ab71f5-19a3-481e-a7c0-e7e829e79ad3" class="block-color-yellow">Cool Plan</p><p id="c4ca46d4-4934-4b31-b9c0-8e7709697773" class="">Under 1,000 visitors a month</p><hr id="b9b13b75-456f-4f25-81c8-8ab17549e6ab"/><h3 id="15ad5594-a919-40ab-847b-37845ff4b1e1" class="">$2/month</h3><p id="690a275b-6cce-4df2-a730-d7f7f97aa439" class="block-color-yellow">Rad Plan</p><p id="063246a8-1fb2-43dc-9665-3b34ef88f1a1" class="">Over 1,000 visitors a month</p><hr id="a86be7c4-734a-4de4-bce4-5786a29acace"/><p id="bbdf0f77-51c5-4487-88ef-5346e4644275" class="">Pricing will change overtime. It&#x27;s free for everyone at the moment for the foreseeable future.</p><p id="8830fd08-cb07-49d8-ac3e-7a2be9f7a7a8" class=""><p id="37b1c28f-99a5-4cd4-80ff-0c5e53e2ac88" class="">
+</p><h3 id="d62d0273-f875-43e4-afa5-707cd56141c8" class="">So who built it? </h3><p id="30f42c27-805a-417e-b5b5-2ad122dda39e" class="">Surya Dantuluri, an independent developer built it. He values privacy and security over anything else and found that current privacy analytics services were bulky and very pricey. So he decided to build an ultra-fast and cheap service for the masses. More on him: suryad.com. If you&#x27;d like to talk, just email him surya@suryad.com!</p><figure id="72247f56-3678-41de-8be8-73f1062b6f1b" class="image"><a href="https://suryad.com"><img src="https://sdan.me/assets/images/smallren.png"/></a>
+</p></div></article><script>
+
+var basic_choropleth = new Datamap({
+  element: document.getElementById("basic_choropleth"),
+  projection: 'mercator',
+  fills: {
+    defaultFill: "#ABDDA4",
+  }
+});
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body></html>
